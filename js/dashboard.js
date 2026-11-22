@@ -8,7 +8,7 @@
     const t = DL.dates.today();
     const day = DL.calc.summarize(data, t, t), week = DL.calc.summarize(data, DL.dates.startOfWeek(t), t), month = DL.calc.summarize(data, DL.dates.startOfMonth(t), t);
     $('#top-cards').innerHTML =
-      DL.ui.stat('Faturamento do dia', money(day.revenue), { icon: 'cart', tone: 'feature', note: day.salesCount + ' venda(s) · ' + int(day.unitsSold) + ' doces' }) +
+      DL.ui.stat('Faturamento do dia', money(day.revenue), { icon: 'cart', tone: 'feature', note: day.salesCount + ' venda(s) · ' + int(day.unitsSold) + ' bolos' }) +
       DL.ui.stat('Faturamento da semana', money(week.revenue), { icon: 'calendar', tone: 'gold', note: 'desde segunda-feira · ' + week.salesCount + ' venda(s)' }) +
       DL.ui.stat('Faturamento do mês', money(month.revenue), { icon: 'trend', tone: 'gold', note: month.salesCount + ' venda(s) · ticket médio ' + money(month.ticket) });
   }
@@ -25,11 +25,11 @@
     const s = DL.calc.summarize(data, r.from, r.to), stock = data.products.reduce((a, p) => a + p.stock, 0);
     $('#period-cards').innerHTML =
       DL.ui.stat('Faturamento', money(s.revenue), { icon: 'dollar', tone: 'gold', note: 'tudo o que você vendeu' }) +
-      DL.ui.stat('Lucro bruto', money(s.grossProfit), { icon: 'tag', tone: s.grossProfit >= 0 ? 'green' : 'red', note: 'faturamento − custo dos doces vendidos' }) +
+      DL.ui.stat('Lucro bruto', money(s.grossProfit), { icon: 'tag', tone: s.grossProfit >= 0 ? 'green' : 'red', note: 'faturamento − custo dos bolos vendidos' }) +
       DL.ui.stat('Total de despesas', money(s.expenses), { icon: 'wallet', tone: 'red', note: 'compras e gastos lançados' }) +
       DL.ui.stat('Lucro estimado', money(s.estimatedProfit), { icon: 'trend', tone: s.estimatedProfit >= 0 ? 'green' : 'red', note: 'faturamento − despesas' + (s.revenue > 0 ? ' · ' + pct((s.estimatedProfit / s.revenue) * 100) : '') }) +
-      DL.ui.stat('Doces produzidos', int(s.produced), { icon: 'cake', note: 'custo da produção ' + money(s.productionCost) }) +
-      DL.ui.stat('Doces vendidos', int(s.unitsSold), { icon: 'cart', note: s.salesCount + ' venda(s)' }) +
+      DL.ui.stat('Bolos produzidos', int(s.produced), { icon: 'cake', note: 'custo da produção ' + money(s.productionCost) }) +
+      DL.ui.stat('Bolos vendidos', int(s.unitsSold), { icon: 'cart', note: s.salesCount + ' venda(s)' }) +
       DL.ui.stat('Ticket médio', money(s.ticket), { icon: 'coins', note: 'valor médio por venda' }) +
       DL.ui.stat('Estoque disponível', int(stock), { icon: 'box', tone: 'dark', note: 'agora, em ' + data.products.length + ' produto(s)' });
     return true;
@@ -46,10 +46,10 @@
 
   function stock() {
     const list = data.products.slice().sort((a, b) => a.stock - b.stock || a.name.localeCompare(b.name, 'pt-BR'));
-    if (!list.length) { $('#stock').innerHTML = DL.ui.emptyState('Nenhum produto cadastrado', 'Cadastre seus doces para acompanhar o estoque.', { href: 'produtos.html', label: 'Cadastrar produto', art: 'mix' }); return; }
+    if (!list.length) { $('#stock').innerHTML = DL.ui.emptyState('Nenhum produto cadastrado', 'Cadastre seus bolos para acompanhar o estoque.', { href: 'produtos.html', label: 'Cadastrar produto', art: 'mix' }); return; }
     const total = list.reduce((a, p) => a + p.stock, 0), value = list.reduce((a, p) => a + p.stock * p.price, 0);
     const max = Math.max.apply(null, list.map((p) => p.stock).concat([1]));
-    $('#stock').innerHTML = '<p class="muted" style="margin-top:-6px"><b>' + int(total) + '</b> doces em estoque, que valem <b>' + money(value) + '</b> a preço de venda.</p><div class="bars">' +
+    $('#stock').innerHTML = '<p class="muted" style="margin-top:-6px"><b>' + int(total) + '</b> bolos em estoque, que valem <b>' + money(value) + '</b> a preço de venda.</p><div class="bars">' +
       list.map((p) => '<div class="bar-row"><span>' + esc(p.name) + '</span><div class="bar-track"><div class="bar-fill" style="width:' + Math.max(p.stock ? 3 : 0, (p.stock / max) * 100) + '%;' + (p.stock <= 5 ? 'background:linear-gradient(90deg,#d9794a,#b3372f)' : '') + '"></div></div><b>' + int(p.stock) + (p.stock === 0 ? ' · esgotado' : p.stock <= 5 ? ' · baixo' : '') + '</b></div>').join('') + '</div>';
   }
 

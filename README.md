@@ -1,6 +1,6 @@
-# Doce Lucrativo
+# Bolo Lucrativo
 
-Plataforma de receitas e gestão para pequenos negócios de doces. HTML, CSS e JavaScript puros, dados no **IndexedDB** (ficam salvos ao fechar o navegador), gráficos com **Chart.js** (incluído na pasta, sem CDN). Funciona offline depois de carregado e não precisa de servidor.
+Plataforma de receitas e gestão para pequenos negócios de bolos. HTML, CSS e JavaScript puros, dados no **IndexedDB** (ficam salvos ao fechar o navegador), gráficos com **Chart.js** (incluído na pasta, sem CDN). Funciona offline depois de carregado e não precisa de servidor.
 
 ## Publicar no GitHub Pages
 1. Crie um repositório e envie **todo o conteúdo desta pasta** (o `index.html` precisa ficar na raiz).
@@ -14,6 +14,7 @@ Para testar no computador, não abra o arquivo direto: rode `python3 -m http.ser
 |---|---|
 | `index.html` | Início |
 | `dashboard.html` · `js/dashboard.js` | Painel com indicadores, período e gráficos |
+| `encomendas.html` · `js/encomendas.js` | Encomendas com data de entrega, sinal, saldo, status e mensagem de WhatsApp |
 | `produtos.html` · `js/produtos.js` | Cadastro de produtos (foto opcional) |
 | `producao.html` · `js/producao.js` | Produção (soma ao estoque) |
 | `vendas.html` · `js/vendas.js` | Vendas (baixa o estoque, bloqueia venda acima do estoque) |
@@ -30,7 +31,7 @@ Para testar no computador, não abra o arquivo direto: rode `python3 -m http.ser
 
 ## Como as contas fecham
 - **Faturamento** = soma das vendas do período.
-- **Lucro bruto** = faturamento − custo dos doces vendidos (o custo unitário é gravado no momento da venda, então mudar o custo depois não altera o histórico).
+- **Lucro bruto** = faturamento − custo dos bolos vendidos (o custo unitário é gravado no momento da venda, então mudar o custo depois não altera o histórico).
 - **Lucro estimado** = faturamento − despesas lançadas no período.
 - O estoque só muda por produção (+), venda (−), edição/exclusão desses registros ou ajuste manual no produto, e **nunca fica negativo**: qualquer operação que o deixaria negativo é recusada por inteiro.
 

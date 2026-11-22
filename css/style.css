@@ -1,4 +1,4 @@
-/* Doce Lucrativo — tema confeitaria: chocolate, creme, bege e dourado */
+/* Bolo Lucrativo — tema confeitaria: chocolate, creme, bege e dourado */
 @font-face { font-family: 'Playfair Display'; font-weight: 400; font-display: swap; src: url('../fonts/playfair-display-latin-400-normal.woff2') format('woff2'); }
 @font-face { font-family: 'Playfair Display'; font-weight: 700; font-display: swap; src: url('../fonts/playfair-display-latin-700-normal.woff2') format('woff2'); }
 @font-face { font-family: 'Nunito'; font-weight: 400; font-display: swap; src: url('../fonts/nunito-latin-400-normal.woff2') format('woff2'); }
@@ -7,9 +7,9 @@
 @font-face { font-family: 'Nunito'; font-weight: 800; font-display: swap; src: url('../fonts/nunito-latin-800-normal.woff2') format('woff2'); }
 
 :root {
-  --choc-950: #1f110b; --choc-900: #2b1810; --choc-800: #3b2216; --choc-700: #4a2c1d; --choc-600: #63391f; --choc-500: #7a4a2e;
-  --caramel: #b9763f; --gold: #c9a24b; --gold-600: #b08a34; --gold-300: #e6c878; --gold-100: #f6ebc9;
-  --cream: #fbf5ea; --beige: #f0e4cf; --beige-2: #e6d6ba; --paper: #fffdf8; --line: #eadcc3;
+  --choc-950: #2a0d10; --choc-900: #541a1f; --choc-800: #541a1f; --choc-700: #6a2027; --choc-600: #8a2a31; --choc-500: #a33a40;
+  --caramel: #d1495b; --gold: #c9a24b; --gold-600: #b08a34; --gold-300: #e6c878; --gold-100: #f6ebc9;
+  --cream: #fdf3f1; --beige: #f8e3df; --beige-2: #f0cfc9; --paper: #fffdfc; --line: #f0d8d3;
   --text: #3a2418; --muted: #85694f; --ok: #3f7d4f; --ok-bg: #e4f1e6; --warn: #b7791f; --warn-bg: #fbefd2; --bad: #b3372f; --bad-bg: #f9e0dc;
   --radius: 16px; --radius-sm: 10px;
   --shadow: 0 1px 2px rgba(59, 34, 22, .06), 0 8px 24px rgba(59, 34, 22, .08);
@@ -227,3 +227,5 @@ details.help { background: var(--cream); border: 1px solid var(--line); border-r
 @media (max-width: 380px) { .cards-grid { grid-template-columns: 1fr; } }
 @media print { .sidebar, .topbar, .bottomnav, .demo-banner, .toasts, .btn, .toolbar { display: none !important; } .main-col { margin: 0; } body { background: #fff; } .card, .stat { box-shadow: none; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+.late { color: #b3372f; }

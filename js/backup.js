@@ -19,7 +19,7 @@
     try {
       const b = await DL.backup.build();
       const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
-      DL.ui.download('doce-lucrativo-backup-' + (DL.mode.isDemo() ? 'demo-' : '') + stamp + '.json', JSON.stringify(b, null, 2), 'application/json;charset=utf-8');
+      DL.ui.download('bolo-lucrativo-backup-' + (DL.mode.isDemo() ? 'demo-' : '') + stamp + '.json', JSON.stringify(b, null, 2), 'application/json;charset=utf-8');
       if (!DL.mode.isDemo()) await DL.db.setSetting('lastBackupAt', Date.now());
       DL.ui.toast('Backup gerado. Guarde o arquivo em local seguro.', 'ok');
       await refreshInfo();

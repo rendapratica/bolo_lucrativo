@@ -1,4 +1,4 @@
-/* art.js — fotos dos doces (img/receitas) e, na falta delas, ilustrações originais (SVG) usadas quando
+/* art.js — fotos dos bolos (img/receitas) e, na falta delas, ilustrações originais (SVG) usadas quando
    não há uma fotografia. Nenhuma imagem externa: funciona offline e sem direitos autorais. */
 (function (global) {
   'use strict';
@@ -11,7 +11,7 @@
   }
   const f = (n) => Math.round(n * 10) / 10;
 
-  // Configuração de cada doce: cores do fundo/mesa, da bola, da forminha e do acabamento
+  // Configuração de cada bolo: cores do fundo/mesa, da bola, da forminha e do acabamento
   const K = {
     brigadeiro: { label: 'Brigadeiros tradicionais com granulado', bg: ['#fbefd6', '#efd3a6'], table: ['#d9a86c', '#b9824a'], base: ['#8a4f2c', '#2c150b'], cup: ['#e6c25f', '#f8e8b0'], top: 'sprinkles', colors: ['#24110a', '#4d2814', '#150804'] },
     gourmet: { label: 'Brigadeiros gourmet brilhantes', bg: ['#f5e6d0', '#e0bd92'], table: ['#caa06a', '#a8794a'], base: ['#6c3a22', '#220f08'], cup: ['#d8b25a', '#f2dea0'], top: 'gloss', colors: ['#e8c866', '#f6e7a8'] },
@@ -21,6 +21,14 @@
     ninho: { label: 'Docinhos de leite em pó', bg: ['#fdf5e3', '#f1dcb2'], table: ['#d9ad74', '#b98a56'], base: ['#fffbee', '#f0e2bd'], cup: ['#f2d58a', '#fbeec2'], top: 'powder', colors: ['#ffffff', '#fff3d4'] },
     cajuzinho: { label: 'Cajuzinhos açucarados', bg: ['#f8e9d0', '#e5c391'], table: ['#cfa066', '#a97a47'], base: ['#8a5530', '#3f2112'], cup: ['#c9923f', '#ecd09a'], top: 'sugar', colors: ['#ffffff', '#f4e9d6'] },
     olho: { label: 'Olhos de sogra', bg: ['#f4e6d8', '#dcbb9a'], table: ['#c99a68', '#a2733f'], base: ['#6a3b4a', '#2c1520'], cup: ['#cfa458', '#f0dba6'], top: 'sugar', colors: ['#ffffff', '#fbeedd'] },
+    'bolo-choc': { label: 'Bolo de chocolate com brigadeiro', bg: ['#fde8e4', '#f2c4bc'], table: ['#e3b9a8', '#c99483'], cake: true, base: ['#6b3a24', '#3a1d10'], fill: '#2b130b', frost: '#4a2318', top: 'granulado' },
+    'bolo-ninho': { label: 'Bolo de ninho com morango', bg: ['#fdeeea', '#f3cfc8'], table: ['#e6c3b3', '#cc9c88'], cake: true, base: ['#fff4d6', '#efd79b'], fill: '#ffffff', frost: '#fffaf0', top: 'morango' },
+    'bolo-cenoura': { label: 'Bolo de cenoura com chocolate', bg: ['#fde9e2', '#f2c8b8'], table: ['#e3b9a8', '#c99483'], cake: true, base: ['#e8893a', '#b8591a'], fill: '#6b3a24', frost: '#4a2318', top: 'raspas' },
+    'bolo-limao': { label: 'Bolo de limão', bg: ['#fdf0e0', '#f3d9b0'], table: ['#e6c9a6', '#cda57c'], cake: true, base: ['#fff0a8', '#e0c446'], fill: '#fffdf0', frost: '#ffffff', top: 'limao' },
+    'bolo-morango': { label: 'Bolo de morango com chantilly', bg: ['#fde9ee', '#f4c3cf'], table: ['#e8c0c0', '#cf9a9a'], cake: true, base: ['#ffd6dc', '#f2a3b0'], fill: '#e63950', frost: '#ffe8ec', top: 'morango' },
+    'bolo-coco': { label: 'Bolo de coco', bg: ['#fdeeea', '#f3d2cb'], table: ['#e6c3b3', '#cc9c88'], cake: true, base: ['#ffffff', '#e6dccb'], fill: '#fffaf0', frost: '#ffffff', top: 'granulado' },
+    'bolo-fuba': { label: 'Bolo de fubá', bg: ['#fdefe0', '#f3d6a8'], table: ['#e6c9a6', '#cda57c'], cake: true, base: ['#f3c969', '#d9a233'], fill: '#f3c969', frost: '#f6e3a3', top: 'raspas' },
+    'bolo-redvelvet': { label: 'Bolo red velvet', bg: ['#fde8e8', '#f1bcbc'], table: ['#e8b9b9', '#cf8f8f'], cake: true, base: ['#b3202f', '#7a1220'], fill: '#ffffff', frost: '#fffaf5', top: 'cereja' },
     brownie: { label: 'Brownies de chocolate', bg: ['#f6e5cd', '#e3c08f'], table: ['#c99a63', '#9d6e3f'], square: true },
     palha: { label: 'Palha italiana', bg: ['#f8e8cf', '#e6c796'], table: ['#d3a56c', '#ad7d49'], square: true, palha: true },
     'pote-choc': { label: 'Bolo no pote de chocolate', bg: ['#f7e6d0', '#e4bf94'], table: ['#caa06a', '#a8794a'], jar: true, layers: ['#4a2616', '#a8683a', '#4a2616', '#a8683a'], topc: '#5a2e1b', sprinkles: true },
@@ -29,7 +37,7 @@
   DL.ART_KINDS = Object.keys(K).concat(['mix']);
 
   // Categoria de produto -> ilustração padrão
-  DL.artForCategory = (cat) => ({ Brigadeiros: 'brigadeiro', Beijinhos: 'beijinho', Trufas: 'trufa', Brownies: 'brownie', 'Bolos no pote': 'pote-choc', 'Docinhos finos': 'cajuzinho', 'Tortas e bolos': 'pote-ninho' }[cat] || 'ninho');
+  DL.artForCategory = (cat) => ({ 'Bolos simples': 'bolo-cenoura', 'Bolos recheados': 'bolo-ninho', 'Bolos de festa': 'bolo-redvelvet', 'Bolos no pote': 'pote-choc', 'Coberturas e recheios': 'bolo-choc' })[cat] || 'mix';
 
   function ballScene(id, cfg, rand, balls) {
     let s = '';
@@ -104,13 +112,28 @@
   }
 
   // Gera o SVG completo. opts.label sobrescreve o texto de acessibilidade.
+  function cakeScene(id, cfg, rand) {
+    const b1 = cfg.base[0], b2 = cfg.base[1], fr = cfg.frost;
+    let s = '<defs><linearGradient id="' + id + 'ck" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="' + b2 + '"/><stop offset=".45" stop-color="' + b1 + '"/><stop offset="1" stop-color="' + b2 + '"/></linearGradient></defs>';
+    s += '<ellipse cx="200" cy="228" rx="140" ry="17" fill="rgba(60,20,20,.18)"/><ellipse cx="200" cy="222" rx="136" ry="16" fill="#fff"/><ellipse cx="200" cy="219" rx="136" ry="16" fill="#f6ecea"/>';
+    s += '<rect x="108" y="128" width="184" height="88" rx="9" fill="url(#' + id + 'ck)"/><rect x="108" y="162" width="184" height="13" fill="' + cfg.fill + '"/>';
+    s += '<path d="M100 130 Q100 108 130 106 L270 106 Q300 108 300 130 L300 140 Q294 156 284 140 Q276 164 264 142 Q254 154 244 140 Q234 172 222 142 Q212 156 200 140 Q188 166 176 142 Q166 154 156 140 Q146 170 134 142 Q124 156 116 140 Q106 150 100 140 Z" fill="' + fr + '"/>';
+    s += '<ellipse cx="200" cy="106" rx="100" ry="13" fill="' + fr + '"/><ellipse cx="200" cy="103" rx="100" ry="12" fill="rgba(255,255,255,.22)"/>';
+    const t = cfg.top, cols = ['#e63946', '#ffd166', '#2a9d8f', '#4cc9f0', '#f4f1de'];
+    if (t === 'morango') [152, 176, 200, 224, 248].forEach((x, i) => { const y = 98 + (i % 2) * 3; s += '<path d="M' + x + ' ' + (y - 8) + ' q-10 2 -10 12 q4 13 10 14 q6 -1 10 -14 q0 -10 -10 -12z" fill="#d62839"/><path d="M' + (x - 5) + ' ' + (y - 8) + ' l5 -4 l5 4z" fill="#3f8a3f"/>'; });
+    else if (t === 'granulado') for (let i = 0; i < 40; i++) s += '<circle cx="' + f(120 + rand() * 160) + '" cy="' + f(97 + rand() * 11) + '" r="1.9" fill="' + cols[Math.floor(rand() * cols.length)] + '"/>';
+    else if (t === 'cereja') s += '<circle cx="200" cy="96" r="10" fill="#b00020"/><path d="M200 86 Q206 74 214 70" stroke="#3f6b2a" stroke-width="2.4" fill="none"/>';
+    else if (t === 'raspas') for (let i = 0; i < 26; i++) s += '<path d="M' + f(118 + rand() * 160) + ' ' + f(96 + rand() * 11) + ' l3 2" stroke="rgba(60,25,15,.7)" stroke-width="2" stroke-linecap="round"/>';
+    else if (t === 'limao') s += '<circle cx="200" cy="98" r="15" fill="#f7e26b" stroke="#fff" stroke-width="3"/><path d="M200 84 V112 M186 98 H214" stroke="#fff" stroke-width="1.6"/>';
+    return s;
+  }
   function art(kind, opts) {
     opts = opts || {};
     const id = 'a' + (++uid) + '_';
     const key = K[kind] ? kind : kind === 'mix' ? 'mix' : 'ninho';
     const cfg = K[key] || K.brigadeiro;
     const rand = pseudo(1000 + key.split('').reduce((a, c) => a + c.charCodeAt(0), 0));
-    let s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' + (opts.label || (cfg.label ? 'Ilustração: ' + cfg.label : 'Ilustração de doces')) + '">';
+    let s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' + (opts.label || (cfg.label ? 'Ilustração: ' + cfg.label : 'Ilustração de bolos')) + '">';
     const bg = (cfg.bg || K.brigadeiro.bg), tb = (cfg.table || K.brigadeiro.table);
     s += '<defs><linearGradient id="' + id + 'bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + bg[0] + '"/><stop offset="1" stop-color="' + bg[1] + '"/></linearGradient><linearGradient id="' + id + 'tb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + tb[0] + '"/><stop offset="1" stop-color="' + tb[1] + '"/></linearGradient></defs>';
     s += '<rect width="400" height="300" fill="url(#' + id + 'bg)"/>';
@@ -118,10 +141,9 @@
     s += '<rect y="214" width="400" height="86" fill="url(#' + id + 'tb)"/><rect y="214" width="400" height="4" fill="rgba(255,255,255,.35)"/>';
     for (let i = 0; i < 5; i++) s += '<path d="M0 ' + (232 + i * 15) + ' Q100 ' + (228 + i * 15) + ' 200 ' + (233 + i * 15) + ' T400 ' + (231 + i * 15) + '" stroke="rgba(80,45,15,.14)" stroke-width="1.5" fill="none"/>';
     if (key === 'mix') {
-      s += ballScene(id, K.brigadeiro, rand, [
-        { n: 1, x: 112, y: 168, r: 44, cfg: K.beijinho }, { n: 2, x: 288, y: 168, r: 44, cfg: K.trufa },
-        { n: 3, x: 200, y: 178, r: 56, cfg: K.brigadeiro }]);
-    } else if (cfg.jar) s += jarScene(id, cfg, rand);
+      s += cakeScene(id, K['bolo-morango'], rand);
+    } else if (cfg.cake) s += cakeScene(id, cfg, rand);
+    else if (cfg.jar) s += jarScene(id, cfg, rand);
     else if (cfg.square) s += brownieScene(id, rand, !!cfg.palha);
     else s += ballScene(id, cfg, rand, [{ n: 1, x: 112, y: 160, r: 40 }, { n: 2, x: 290, y: 164, r: 42 }, { n: 3, x: 200, y: 180, r: 56 }]);
     s += '<rect width="400" height="300" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="6"/></svg>';
@@ -129,17 +151,13 @@
   }
   DL.artSvg = art;
 
-  // Fotos reais de cada tipo de doce. Quando existe foto, DL.art devolve <img>; senão, o desenho em SVG.
-  const PHOTOS = {
-    brigadeiro: 'brigadeiro-tradicional', gourmet: 'brigadeiro-gourmet', beijinho: 'beijinho', trufa: 'trufa-chocolate-ao-leite',
-    maracuja: 'trufa-maracuja', ninho: 'ninho-brigadeiro-branco', cajuzinho: 'cajuzinho', olho: 'olho-de-sogra', brownie: 'brownie-tradicional',
-    palha: 'palha-italiana', 'pote-choc': 'bolo-pote-chocolate', 'pote-ninho': 'bolo-pote-ninho-morango', mix: 'home-doces',
-  };
+  // Fotos reais de cada tipo de bolo. Quando existe foto, DL.art devolve <img>; senão, o desenho em SVG.
+  const PHOTOS = {}; // sem fotos por enquanto: coloque em img/receitas/ e mapeie aqui (veja recipes-data.js)
   DL.art = function (kind, opts) {
     opts = opts || {};
     const file = PHOTOS[kind];
     if (!file) return art(kind, opts);
-    const label = (opts.label || (K[kind] && K[kind].label) || 'Doces').replace(/^Ilustração (de |: )?/, '');
+    const label = (opts.label || (K[kind] && K[kind].label) || 'Bolos').replace(/^Ilustração (de |: )?/, '');
     return '<img src="img/receitas/' + file + '.jpg" alt="' + label.replace(/"/g, '&quot;') + '" loading="lazy">';
   };
 })(typeof globalThis !== 'undefined' ? globalThis : window);
