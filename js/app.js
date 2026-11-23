@@ -152,18 +152,18 @@
 
   /* ---------- Menu e casca da página ---------- */
   const NAV = [
-    ['index', 'index.html', 'Início', 'home'], ['dashboard', 'dashboard.html', 'Painel', 'chart'], ['encomendas', 'encomendas.html', 'Encomendas', 'calendar'], ['vendas', 'vendas.html', 'Vendas', 'cart'],
+    ['index', 'index.html', 'Início', 'home'], ['dashboard', 'dashboard.html', 'Painel', 'chart'], ['vendas', 'vendas.html', 'Vendas', 'cart'],
     ['producao', 'producao.html', 'Produção', 'cake'], ['produtos', 'produtos.html', 'Produtos', 'box'], ['despesas', 'despesas.html', 'Despesas', 'wallet'],
     ['calculadora', 'calculadora.html', 'Calculadora de preços', 'calc'], ['relatorios', 'relatorios.html', 'Relatórios', 'file'],
     ['receitas', 'receitas.html', 'Receitas', 'book'], ['backup', 'backup.html', 'Backup e ajustes', 'shield'],
   ];
-  const BOTTOM = [['dashboard', 'Painel', 'chart'], ['encomendas', 'Encomendas', 'calendar'], ['vendas', 'Vendas', 'cart'], ['receitas', 'Receitas', 'book']];
-  const LOGO = '<svg class="brand-logo" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6c878"/><stop offset="1" stop-color="#b08a34"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="#541a1f" stroke="url(#lg)" stroke-width="2"/><path d="M13 27c0-6 5-11 11-11s11 5 11 11H13Z" fill="url(#lg)"/><path d="M12 28h24l-2.4 8.5a3 3 0 0 1-2.9 2.2H17.3a3 3 0 0 1-2.9-2.2Z" fill="#fdf3f1"/><path d="M18 29l1.4 9M24 29v9.5M30 29l-1.4 9" stroke="#c9a24b" stroke-width="1.4"/><circle cx="24" cy="13.5" r="3" fill="#d1495b"/></svg>';
+  const BOTTOM = [['dashboard', 'Painel', 'chart'], ['vendas', 'Vendas', 'cart'], ['producao', 'Produção', 'cake'], ['receitas', 'Receitas', 'book']];
+  const LOGO = '<svg class="brand-logo" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6c878"/><stop offset="1" stop-color="#b08a34"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="#3b2216" stroke="url(#lg)" stroke-width="2"/><path d="M13 27c0-6 5-11 11-11s11 5 11 11H13Z" fill="url(#lg)"/><path d="M12 28h24l-2.4 8.5a3 3 0 0 1-2.9 2.2H17.3a3 3 0 0 1-2.9-2.2Z" fill="#fbf5ea"/><path d="M18 29l1.4 9M24 29v9.5M30 29l-1.4 9" stroke="#c9a24b" stroke-width="1.4"/><circle cx="24" cy="13.5" r="3" fill="#b9763f"/></svg>';
 
   function buildShell(page, title, sub) {
     const main = $('#content');
     const shell = doc.createElement('div'); shell.className = 'shell';
-    const side = '<aside class="sidebar" id="sidebar" aria-label="Menu principal"><a class="brand" href="index.html">' + LOGO + '<span><span class="brand-name">Bolo Lucrativo</span><br><span class="brand-tag">Receitas &amp; gestão</span></span></a><nav class="nav">' +
+    const side = '<aside class="sidebar" id="sidebar" aria-label="Menu principal"><a class="brand" href="index.html">' + LOGO + '<span><span class="brand-name">Doce Lucrativo</span><br><span class="brand-tag">Receitas &amp; gestão</span></span></a><nav class="nav">' +
       NAV.map((n, i) => (i === 1 || i === 8 ? '<div class="nav-sep"></div>' : '') + '<a href="' + n[1] + '"' + (n[0] === page ? ' class="active" aria-current="page"' : '') + '>' + icon(n[3]) + '<span>' + n[2] + '</span></a>').join('') +
       '</nav><div class="side-foot"><div id="side-mode"></div><p class="small" style="margin:12px 4px 0">Seus dados ficam salvos neste aparelho. Faça backup com frequência.</p></div></aside><div class="backdrop" id="backdrop"></div>';
     const col = doc.createElement('div'); col.className = 'main-col';
@@ -214,7 +214,7 @@
   /* ---------- Inicialização das páginas ---------- */
   async function boot(init) {
     const body = doc.body, page = body.dataset.page || '';
-    buildShell(page, body.dataset.title || 'Bolo Lucrativo', body.dataset.sub || '');
+    buildShell(page, body.dataset.title || 'Doce Lucrativo', body.dataset.sub || '');
     wireDialogs();
     const content = $('#content');
     try {
@@ -233,7 +233,7 @@
     o = o || {};
     return '<div class="stat ' + (o.tone || '') + '"><div class="ico">' + icon(o.icon || 'coins') + '</div><div><div class="k">' + esc(label) + '</div><div class="v">' + value + '</div>' + (o.note ? '<div class="n">' + o.note + '</div>' : '') + '</div></div>';
   };
-  const emptyState = (title, text, action) => '<div class="empty">' + DL.art(action && action.art ? action.art : 'bolo-choc').replace(/^<(svg|img) /, '<$1 class="art" ') + '<h3>' + esc(title) + '</h3><p>' + text + '</p>' + (action && action.href ? '<a class="btn primary" href="' + action.href + '">' + esc(action.label) + '</a>' : '') + '</div>';
+  const emptyState = (title, text, action) => '<div class="empty">' + DL.art(action && action.art ? action.art : 'brigadeiro').replace(/^<(svg|img) /, '<$1 class="art" ') + '<h3>' + esc(title) + '</h3><p>' + text + '</p>' + (action && action.href ? '<a class="btn primary" href="' + action.href + '">' + esc(action.label) + '</a>' : '') + '</div>';
   const periodPicker = (id) => '<div class="field"><label for="' + id + '-p">Período</label><select id="' + id + '-p">' + options(DL.PRESETS.map((p) => [p[0], p[1]]), '30d') + '</select></div>' +
     '<div class="field" data-custom hidden><label for="' + id + '-f">De</label><input type="date" id="' + id + '-f"></div><div class="field" data-custom hidden><label for="' + id + '-t">Até</label><input type="date" id="' + id + '-t"></div>';
   // Lê o período escolhido: devolve {from,to} ou {error}

@@ -17,7 +17,7 @@
     $('#report').hidden = false;
     const s = DL.calc.summarize(data, range.from, range.to);
     $('#cards').innerHTML =
-      DL.ui.stat('Total vendido', money(s.revenue), { icon: 'dollar', tone: 'gold', note: s.salesCount + ' venda(s) · ' + int(s.unitsSold) + ' bolos' }) +
+      DL.ui.stat('Total vendido', money(s.revenue), { icon: 'dollar', tone: 'gold', note: s.salesCount + ' venda(s) · ' + int(s.unitsSold) + ' doces' }) +
       DL.ui.stat('Total produzido', int(s.produced), { icon: 'cake', note: 'custo ' + money(s.productionCost) }) +
       DL.ui.stat('Total de despesas', money(s.expenses), { icon: 'wallet', tone: 'red' }) +
       DL.ui.stat('Lucro estimado', money(s.estimatedProfit), { icon: 'trend', tone: s.estimatedProfit >= 0 ? 'green' : 'red', note: 'faturamento − despesas · lucro bruto ' + money(s.grossProfit) });
@@ -37,7 +37,7 @@
     const tag = range.from + '_a_' + range.to;
     if (kind === 'resumo') {
       const s = DL.calc.summarize(data, range.from, range.to), top = DL.calc.topProducts(data.sales, range.from, range.to);
-      const body = [['Período', DL.dates.br(range.from) + ' a ' + DL.dates.br(range.to)], ['Total vendido (R$)', s.revenue], ['Vendas (quantidade)', s.salesCount], ['Bolos vendidos', s.unitsSold], ['Bolos produzidos', s.produced], ['Custo da produção (R$)', s.productionCost], ['Custo dos bolos vendidos (R$)', s.cogs], ['Lucro bruto (R$)', s.grossProfit], ['Total de despesas (R$)', s.expenses], ['Lucro estimado (R$)', s.estimatedProfit], ['', ''], ['Produto mais vendido', 'Quantidade / Faturamento (R$)']]
+      const body = [['Período', DL.dates.br(range.from) + ' a ' + DL.dates.br(range.to)], ['Total vendido (R$)', s.revenue], ['Vendas (quantidade)', s.salesCount], ['Doces vendidos', s.unitsSold], ['Doces produzidos', s.produced], ['Custo da produção (R$)', s.productionCost], ['Custo dos doces vendidos (R$)', s.cogs], ['Lucro bruto (R$)', s.grossProfit], ['Total de despesas (R$)', s.expenses], ['Lucro estimado (R$)', s.estimatedProfit], ['', ''], ['Produto mais vendido', 'Quantidade / Faturamento (R$)']]
         .concat(top.map((t) => [t.name, t.qty + ' un. / ' + String(t.revenue).replace('.', ',')]));
       DL.ui.downloadCSV('resumo_' + tag + '.csv', ['Indicador', 'Valor'], body);
     } else if (kind === 'vendas') {

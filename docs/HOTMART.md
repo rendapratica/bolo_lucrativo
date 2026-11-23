@@ -1,6 +1,6 @@
 # Integração com a Hotmart (preparada, ainda não ligada)
 
-Hoje o Bolo Lucrativo roda 100% no navegador, sem login. Este guia descreve como ligar o **acesso individual por compra aprovada**, sem colocar nenhum segredo no JavaScript do site.
+Hoje o Doce Lucrativo roda 100% no navegador, sem login. Este guia descreve como ligar o **acesso individual por compra aprovada**, sem colocar nenhum segredo no JavaScript do site.
 
 > **Regra de ouro:** o GitHub Pages só serve arquivos estáticos. Qualquer segredo (hottok, client secret) no JS ou no repositório público fica visível para todos. Por isso a validação de acesso fica em um **backend separado**, e o site só pergunta a ele "esta pessoa tem acesso?".
 

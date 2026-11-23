@@ -7,13 +7,10 @@
   const { num, dates } = DL;
 
   /* ---------- Constantes ---------- */
-  DL.CATEGORIES = ['Bolos simples', 'Bolos recheados', 'Bolos de festa', 'Bolos no pote', 'Coberturas e recheios', 'Outros'];
-  DL.ORDER_STATUS = ['Pedido', 'Em produção', 'Pronto', 'Entregue', 'Cancelado'];
-  DL.ORDER_DELIVERY = ['Retirada', 'Entrega'];
-  DL.ORDER_SIZES = ['Mini (10 cm)', '15 cm', '20 cm', '25 cm', '30 cm', 'Retangular', 'Por fatia', 'Cento de fatias'];
+  DL.CATEGORIES = ['Brigadeiros', 'Beijinhos', 'Trufas', 'Brownies', 'Bolos no pote', 'Docinhos finos', 'Tortas e bolos', 'Outros'];
   DL.PAYMENTS = ['Pix', 'Dinheiro', 'Cartão de débito', 'Cartão de crédito', 'Transferência', 'Outro'];
   DL.EXPENSE_CATEGORIES = ['Chocolate', 'Leite condensado', 'Creme de leite', 'Embalagens', 'Granulados', 'Energia', 'Gás', 'Transporte', 'Outras despesas'];
-  const STORES = ['products', 'productions', 'sales', 'expenses', 'settings', 'recipes', 'orders'];
+  const STORES = ['products', 'productions', 'sales', 'expenses', 'settings', 'recipes'];
   const DB_VERSION = 1;
   const MAX_PHOTO = 2 * 1024 * 1024; // caracteres do data URL
 
@@ -27,15 +24,15 @@
   /* ---------- Modo (real × demonstração): bancos separados ---------- */
   let memMode = 'real';
   DL.mode = {
-    get() { try { return localStorage.getItem('bl_mode') === 'demo' ? 'demo' : 'real'; } catch (e) { return memMode; } },
-    set(m) { memMode = m === 'demo' ? 'demo' : 'real'; try { localStorage.setItem('bl_mode', memMode); } catch (e) { /* ignorar */ } },
+    get() { try { return localStorage.getItem('dl_mode') === 'demo' ? 'demo' : 'real'; } catch (e) { return memMode; } },
+    set(m) { memMode = m === 'demo' ? 'demo' : 'real'; try { localStorage.setItem('dl_mode', memMode); } catch (e) { /* ignorar */ } },
     isDemo() { return DL.mode.get() === 'demo'; },
   };
 
   /* ---------- Conexão ---------- */
   let dbPromise = null, dbName = null;
   function open() {
-    const name = DL.mode.isDemo() ? 'bolo-lucrativo-demo' : 'bolo-lucrativo';
+    const name = DL.mode.isDemo() ? 'doce-lucrativo-demo' : 'doce-lucrativo';
     if (dbPromise && dbName === name) return dbPromise;
     dbName = name;
     dbPromise = new Promise((resolve, reject) => {
@@ -49,7 +46,6 @@
         });
         if (!db.objectStoreNames.contains('settings')) db.createObjectStore('settings', { keyPath: 'key' });
         if (!db.objectStoreNames.contains('recipes')) db.createObjectStore('recipes', { keyPath: 'id', autoIncrement: true });
-        if (!db.objectStoreNames.contains('orders')) db.createObjectStore('orders', { keyPath: 'id', autoIncrement: true }).createIndex('deliveryDate', 'deliveryDate');
       };
       req.onsuccess = () => {
         const db = req.result;
@@ -153,26 +149,6 @@
       if (!dates.isValid(i.date)) e.date = 'Informe uma data válida.';
       else if (i.date > dates.today()) e.date = 'A data não pode ser futura.';
       return result(e, { description: desc, category: str(i.category), amount: num.round2(amount), date: i.date });
-    },
-    order(i) {
-      const e = {}, customer = str(i.customer), phone = str(i.phone), item = str(i.item), size = str(i.size), theme = str(i.theme), address = str(i.address), notes = str(i.notes), time = str(i.deliveryTime);
-      const total = num.parseMoney(i.total), deposit = (i.deposit === '' || i.deposit == null) ? 0 : num.parseMoney(i.deposit);
-      if (customer.length < 2 || customer.length > 80) e.customer = 'Informe o nome do cliente.';
-      if (phone.length > 30) e.phone = 'Telefone muito longo.';
-      if (item.length < 2 || item.length > 100) e.item = 'Descreva o bolo (2 a 100 letras).';
-      if (size.length > 40) e.size = 'Tamanho muito longo (até 40 letras).';
-      if (theme.length > 300) e.theme = 'Texto muito longo (até 300 letras).';
-      if (address.length > 150) e.address = 'Endereço muito longo.';
-      if (notes.length > 300) e.notes = 'Texto muito longo (até 300 letras).';
-      if (!dates.isValid(i.deliveryDate)) e.deliveryDate = 'Informe a data de entrega.';
-      if (time && !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) e.deliveryTime = 'Hora inválida.';
-      if (DL.ORDER_DELIVERY.indexOf(str(i.delivery)) === -1) e.delivery = 'Escolha retirada ou entrega.';
-      if (!(total > 0)) e.total = 'Informe o valor total (maior que zero).';
-      else if (total > 10000000) e.total = 'Valor muito alto. Confira.';
-      if (!(deposit >= 0)) e.deposit = 'Sinal inválido.';
-      else if (total > 0 && deposit > total) e.deposit = 'O sinal não pode ser maior que o valor total.';
-      if (DL.ORDER_STATUS.indexOf(str(i.status)) === -1) e.status = 'Escolha o status.';
-      return result(e, { customer, phone, item, size, theme, deliveryDate: i.deliveryDate, deliveryTime: time, delivery: str(i.delivery), address, total: num.round2(total), deposit: num.round2(deposit), status: str(i.status), notes });
     },
     recipe(i) {
       const e = {}, name = str(i.name);
@@ -335,30 +311,6 @@
   };
   ops.deleteExpense = (id) => DL.db.delete('expenses', Number(id));
 
-  // Encomendas de bolos (data de entrega e sinal)
-  ops.saveOrder = async function (input, id) {
-    const v = fail(validate.order(input));
-    return run(['orders'], 'readwrite', async (st) => {
-      let rec;
-      if (id) {
-        const old = await p(st.orders.get(Number(id)));
-        if (!old) throw new DLError('Encomenda não encontrada.');
-        rec = Object.assign({}, old, v);
-      } else rec = Object.assign({}, v, { createdAt: Date.now() });
-      rec.id = await p(st.orders.put(rec));
-      return rec;
-    });
-  };
-  ops.setOrderStatus = async function (id, status) {
-    if (DL.ORDER_STATUS.indexOf(status) === -1) throw new DLError('Status inválido.');
-    return run(['orders'], 'readwrite', async (st) => {
-      const old = await p(st.orders.get(Number(id)));
-      if (!old) throw new DLError('Encomenda não encontrada.');
-      old.status = status; await p(st.orders.put(old)); return old;
-    });
-  };
-  ops.deleteOrder = (id) => DL.db.delete('orders', Number(id));
-
   // Receitas cadastradas pelo usuário
   ops.saveRecipe = async function (input, id) {
     const v = fail(validate.recipe(input));
@@ -380,7 +332,7 @@
   backup.build = async function () {
     const data = {};
     for (const s of STORES) data[s] = await DL.db.getAll(s);
-    return { app: 'bolo-lucrativo', version: 1, exportedAt: new Date().toISOString(), mode: DL.mode.get(), data };
+    return { app: 'doce-lucrativo', version: 1, exportedAt: new Date().toISOString(), mode: DL.mode.get(), data };
   };
 
   const isObj = (x) => x && typeof x === 'object' && !Array.isArray(x);
@@ -403,11 +355,6 @@
       if (!isObj(r) || !okId(r.id) || typeof r.description !== 'string' || !finite(r.amount) || r.amount <= 0 || !dates.isValid(r.date)) return null;
       return { id: r.id, description: r.description.slice(0, 100), category: DL.EXPENSE_CATEGORIES.indexOf(r.category) >= 0 ? r.category : 'Outras despesas', amount: r.amount, date: r.date, createdAt: finite(r.createdAt) ? r.createdAt : Date.now() };
     },
-    orders(r) {
-      if (!isObj(r) || !okId(r.id) || typeof r.customer !== 'string' || !dates.isValid(r.deliveryDate) || !finite(r.total) || r.total <= 0) return null;
-      const s = (v, n) => String(v == null ? '' : v).slice(0, n), dep = finite(r.deposit) && r.deposit >= 0 && r.deposit <= r.total ? r.deposit : 0;
-      return { id: r.id, customer: s(r.customer, 80), phone: s(r.phone, 30), item: s(r.item, 100), size: s(r.size, 40), theme: s(r.theme, 300), deliveryDate: r.deliveryDate, deliveryTime: /^([01]\d|2[0-3]):[0-5]\d$/.test(r.deliveryTime || '') ? r.deliveryTime : '', delivery: DL.ORDER_DELIVERY.indexOf(r.delivery) >= 0 ? r.delivery : 'Retirada', address: s(r.address, 150), total: r.total, deposit: dep, status: DL.ORDER_STATUS.indexOf(r.status) >= 0 ? r.status : 'Pedido', notes: s(r.notes, 300), createdAt: finite(r.createdAt) ? r.createdAt : Date.now() };
-    },
     settings(r) {
       if (!isObj(r) || typeof r.key !== 'string' || !r.key || r.key.length > 60) return null;
       const t = typeof r.value;
@@ -425,7 +372,7 @@
   backup.parse = function (text) {
     let obj;
     try { obj = JSON.parse(text); } catch (e) { throw new DLError('Esse arquivo não é um backup válido (JSON ilegível).'); }
-    if (!isObj(obj) || obj.app !== 'bolo-lucrativo' || !isObj(obj.data)) throw new DLError('Esse arquivo não parece ser um backup do Bolo Lucrativo.');
+    if (!isObj(obj) || obj.app !== 'doce-lucrativo' || !isObj(obj.data)) throw new DLError('Esse arquivo não parece ser um backup do Doce Lucrativo.');
     if (obj.version !== 1) throw new DLError('Versão de backup não suportada.');
     const clean = {};
     for (const s of STORES) {
@@ -461,11 +408,11 @@
       const rnd = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
       const ri = (lo, hi) => lo + Math.floor(rnd() * (hi - lo + 1));
       const prods = [
-        ['Bolo de chocolate (fatia)', 'Bolos recheados', 'Fatia fofinha com cobertura de brigadeiro.', 9.0, 3.2],
-        ['Bolo de cenoura (fatia)', 'Bolos simples', 'Cobertura de chocolate cremosa.', 7.0, 2.4],
-        ['Bolo de ninho com morango (fatia)', 'Bolos recheados', 'Recheio cremoso de leite ninho e morango.', 12.0, 4.6],
-        ['Bolo red velvet (fatia)', 'Bolos de festa', 'Cobertura de cream cheese.', 13.0, 5.2],
-        ['Bolo de limão (fatia)', 'Bolos simples', 'Com glacê de limão.', 7.0, 2.3],
+        ['Brigadeiro tradicional', 'Brigadeiros', 'Clássico de chocolate com granulado.', 2.5, 0.85],
+        ['Brigadeiro gourmet', 'Brigadeiros', 'Chocolate meio amargo cremoso.', 4.0, 1.5],
+        ['Beijinho', 'Beijinhos', 'Coco e leite condensado, com cravo.', 2.5, 0.8],
+        ['Trufa de chocolate', 'Trufas', 'Ganache de chocolate ao leite.', 4.5, 1.7],
+        ['Brownie', 'Brownies', 'Úmido por dentro, casquinha crocante.', 6.0, 2.2],
         ['Bolo no pote de brigadeiro', 'Bolos no pote', 'Massa fofinha e recheio cremoso.', 11.0, 4.3],
       ].map((x, i) => ({ id: i + 1, name: x[0], category: x[1], description: x[2], price: x[3], cost: x[4], stock: 0, photo: '', createdAt: Date.now(), updatedAt: Date.now() }));
       const productions = [], sales = [], expenses = [];

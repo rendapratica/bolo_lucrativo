@@ -67,7 +67,7 @@
 
   /* ---------- Resumo financeiro ----------
      faturamento     = soma das vendas
-     lucro bruto     = faturamento − custo dos bolos vendidos (custo unitário gravado na venda)
+     lucro bruto     = faturamento − custo dos doces vendidos (custo unitário gravado na venda)
      lucro estimado  = faturamento − despesas do período (visão de caixa simples) */
   function summarize(data, from, to) {
     const sales = (data.sales || []).filter((s) => inRange(s.date, from, to));
@@ -141,7 +141,7 @@
     const margin = num.parseMoney(i.margin);
     const planned = i.plannedPrice === '' || i.plannedPrice == null ? 0 : num.parseMoney(i.plannedPrice);
     const mode = i.mode === 'markup' ? 'markup' : 'margin';
-    if (!(qty >= 1)) errors.qty = 'Informe a quantidade de bolos (número inteiro, mínimo 1).';
+    if (!(qty >= 1)) errors.qty = 'Informe a quantidade de doces (número inteiro, mínimo 1).';
     if (!(ingredients >= 0)) errors.ingredients = 'Informe o custo dos ingredientes (pode ser 0).';
     if (Number.isNaN(packaging) || packaging < 0) errors.packaging = 'Valor inválido.';
     if (Number.isNaN(other) || other < 0) errors.other = 'Valor inválido.';

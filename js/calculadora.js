@@ -17,7 +17,7 @@
     const vals = read();
     const blank = !vals.ingredients && !vals.qty;
     $('#mode-hint').textContent = mode === 'margin' ? 'Ex.: margem de 50% significa que metade do preço é lucro.' : 'Ex.: markup de 100% significa cobrar o dobro do custo.';
-    if (blank && !touched) { last = null; $('#result').innerHTML = '<div class="card center muted">' + DL.art('bolo-choc').replace(/^<(svg|img) /, '<$1 style="width:180px;aspect-ratio:4/3;object-fit:cover;border-radius:16px;margin:0 auto 10px;display:block" ') + '<p>Preencha os custos ao lado e veja o preço ideal aparecer aqui.</p></div>'; $('#apply-card').hidden = true; DL.ui.showErrors(form, {}); return; }
+    if (blank && !touched) { last = null; $('#result').innerHTML = '<div class="card center muted">' + DL.art('brigadeiro').replace(/^<(svg|img) /, '<$1 style="width:180px;aspect-ratio:4/3;object-fit:cover;border-radius:16px;margin:0 auto 10px;display:block" ') + '<p>Preencha os custos ao lado e veja o preço ideal aparecer aqui.</p></div>'; $('#apply-card').hidden = true; DL.ui.showErrors(form, {}); return; }
     const r = DL.calc.priceCalc(vals);
     if (!r.ok) {
       last = null; $('#apply-card').hidden = true;
@@ -35,11 +35,11 @@
       '<div class="card"><h3>Por unidade</h3>' +
       row('Custo unitário', money(r.unitCost)) + row('Lucro por unidade', money(r.profitUnit), mUnit) +
       row('Margem de lucro (sobre o preço)', pct(r.marginReal), mUnit) + row('Markup (sobre o custo)', pct(r.markupReal), mUnit) + '</div>' +
-      '<div class="card section"><h3>Lote de ' + int(r.qty) + ' bolos</h3>' +
+      '<div class="card section"><h3>Lote de ' + int(r.qty) + ' doces</h3>' +
       row('Faturamento previsto', money(r.revenue)) + row('Custo de ingredientes e embalagens', money(r.ingredients + r.packaging)) +
       row('Lucro bruto', money(r.grossProfit), r.grossProfit >= 0 ? 'pos' : 'neg') + row('Outros custos', money(r.other)) +
       '<div class="row between" style="padding:12px 0 0"><b>Lucro total estimado (após despesas)</b><b class="' + (r.estimatedProfit >= 0 ? 'pos' : 'neg') + '" style="font-size:1.3rem;font-family:var(--font-title)">' + money(r.estimatedProfit) + '</b></div></div>' +
-      (r.profitUnit < 0 ? '<div class="alert bad section">' + icon('alert') + '<span>Com este preço você <b>perde dinheiro</b> em cada bolo. Aumente o preço ou reduza os custos.</span></div>' : '');
+      (r.profitUnit < 0 ? '<div class="alert bad section">' + icon('alert') + '<span>Com este preço você <b>perde dinheiro</b> em cada doce. Aumente o preço ou reduza os custos.</span></div>' : '');
     $('#apply-card').hidden = !products.length;
   }
 
