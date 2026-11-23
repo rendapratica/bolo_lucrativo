@@ -263,7 +263,7 @@
     "id": "ganache-chocolate",
     "name": "Ganache de chocolate para cobertura",
     "category": "Coberturas e recheios",
-    "art": "bolo-choc",
+    "art": "ganache",
     "photo": null,
     "yield": "Cobre 1 bolo de 22 cm",
     "time": "20 min + 1 h de descanso",

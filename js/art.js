@@ -21,6 +21,7 @@
     ninho: { label: 'Docinhos de leite em pó', bg: ['#fdf5e3', '#f1dcb2'], table: ['#d9ad74', '#b98a56'], base: ['#fffbee', '#f0e2bd'], cup: ['#f2d58a', '#fbeec2'], top: 'powder', colors: ['#ffffff', '#fff3d4'] },
     cajuzinho: { label: 'Cajuzinhos açucarados', bg: ['#f8e9d0', '#e5c391'], table: ['#cfa066', '#a97a47'], base: ['#8a5530', '#3f2112'], cup: ['#c9923f', '#ecd09a'], top: 'sugar', colors: ['#ffffff', '#f4e9d6'] },
     olho: { label: 'Olhos de sogra', bg: ['#f4e6d8', '#dcbb9a'], table: ['#c99a68', '#a2733f'], base: ['#6a3b4a', '#2c1520'], cup: ['#cfa458', '#f0dba6'], top: 'sugar', colors: ['#ffffff', '#fbeedd'] },
+    ganache: { label: 'Ganache de chocolate', bg: ['#fde8e4', '#f2c4bc'], table: ['#e3b9a8', '#c99483'], cake: true, base: ['#6b3a24', '#3a1d10'], fill: '#2b130b', frost: '#4a2318', top: 'granulado' },
     'bolo-choc': { label: 'Bolo de chocolate com brigadeiro', bg: ['#fde8e4', '#f2c4bc'], table: ['#e3b9a8', '#c99483'], cake: true, base: ['#6b3a24', '#3a1d10'], fill: '#2b130b', frost: '#4a2318', top: 'granulado' },
     'bolo-ninho': { label: 'Bolo de ninho com morango', bg: ['#fdeeea', '#f3cfc8'], table: ['#e6c3b3', '#cc9c88'], cake: true, base: ['#fff4d6', '#efd79b'], fill: '#ffffff', frost: '#fffaf0', top: 'morango' },
     'bolo-cenoura': { label: 'Bolo de cenoura com chocolate', bg: ['#fde9e2', '#f2c8b8'], table: ['#e3b9a8', '#c99483'], cake: true, base: ['#e8893a', '#b8591a'], fill: '#6b3a24', frost: '#4a2318', top: 'raspas' },
@@ -37,7 +38,7 @@
   DL.ART_KINDS = Object.keys(K).concat(['mix']);
 
   // Categoria de produto -> ilustração padrão
-  DL.artForCategory = (cat) => ({ 'Bolos simples': 'bolo-cenoura', 'Bolos recheados': 'bolo-ninho', 'Bolos de festa': 'bolo-redvelvet', 'Bolos no pote': 'pote-choc', 'Coberturas e recheios': 'bolo-choc' })[cat] || 'mix';
+  DL.artForCategory = (cat) => ({ 'Bolos simples': 'bolo-cenoura', 'Bolos recheados': 'bolo-ninho', 'Bolos de festa': 'bolo-redvelvet', 'Bolos no pote': 'pote-choc', 'Coberturas e recheios': 'ganache' })[cat] || 'mix';
 
   function ballScene(id, cfg, rand, balls) {
     let s = '';
@@ -152,7 +153,11 @@
   DL.artSvg = art;
 
   // Fotos reais de cada tipo de bolo. Quando existe foto, DL.art devolve <img>; senão, o desenho em SVG.
-  const PHOTOS = {}; // sem fotos por enquanto: coloque em img/receitas/ e mapeie aqui (veja recipes-data.js)
+  const PHOTOS = {
+    'bolo-choc': 'bolo-chocolate', 'bolo-cenoura': 'bolo-cenoura', 'bolo-fuba': 'bolo-fuba-cremoso', 'bolo-limao': 'bolo-limao', 'bolo-ninho': 'bolo-ninho-morango',
+    'bolo-coco': 'bolo-coco-gelado', 'bolo-redvelvet': 'bolo-red-velvet', 'pote-choc': 'bolo-pote-brigadeiro', 'pote-ninho': 'bolo-pote-ninho-morango', ganache: 'ganache-chocolate',
+    mix: 'bolo-ninho-morango'
+  };
   DL.art = function (kind, opts) {
     opts = opts || {};
     const file = PHOTOS[kind];
