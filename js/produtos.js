@@ -13,9 +13,9 @@
     const q = $('#q').value.trim().toLowerCase(), cat = $('#cat').value;
     const list = products.filter((p) => (!cat || p.category === cat) && (!q || (p.name + ' ' + p.description).toLowerCase().indexOf(q) !== -1));
     const stockUnits = products.reduce((a, p) => a + p.stock, 0), stockValue = products.reduce((a, p) => a + p.stock * p.cost, 0), stockSale = products.reduce((a, p) => a + p.stock * p.price, 0);
-    $('#summary').innerHTML = DL.ui.stat('Produtos cadastrados', int(products.length), { icon: 'box' }) + DL.ui.stat('Doces em estoque', int(stockUnits), { icon: 'layers', tone: 'dark' }) +
+    $('#summary').innerHTML = DL.ui.stat('Produtos cadastrados', int(products.length), { icon: 'box' }) + DL.ui.stat('Bolos em estoque', int(stockUnits), { icon: 'layers', tone: 'dark' }) +
       DL.ui.stat('Valor do estoque', money(stockSale), { icon: 'coins', tone: 'gold', note: 'a preço de venda · custo ' + money(stockValue) });
-    if (!products.length) { $('#list').innerHTML = DL.ui.emptyState('Nenhum produto ainda', 'Cadastre seus doces para registrar produção e vendas.', { art: 'mix' }); return; }
+    if (!products.length) { $('#list').innerHTML = DL.ui.emptyState('Nenhum produto ainda', 'Cadastre seus bolos para registrar produção e vendas.', { art: 'mix' }); return; }
     if (!list.length) { $('#list').innerHTML = DL.ui.emptyState('Nada encontrado', 'Tente outra busca ou categoria.', { art: 'ninho' }); return; }
     $('#list').innerHTML = '<div class="cards-grid">' + list.map((p) =>
       '<article class="tile"><div class="thumb">' + DL.ui.thumb(p, DL.artForCategory(p.category)) + '<span class="badge">' + stockBadge(p) + '</span></div>' +
